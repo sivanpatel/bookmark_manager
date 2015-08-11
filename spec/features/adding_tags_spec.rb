@@ -7,10 +7,10 @@ feature 'Adding tags' do
     fill_in 'url', with: 'http://www.makersacademy.com'
     fill_in 'title', with: 'Makers Academy'
 
-    fill_in 'tags', with: 'education'
+    fill_in 'tag', with: 'education'
 
     click_button 'Create link'
     link = Link.first
-    expect(link.tags).to inlcude('education')
+    expect(link.tags).to include('education')
   end
 end
