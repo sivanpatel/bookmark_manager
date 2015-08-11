@@ -5,6 +5,7 @@ ENV['RACK_ENV'] = 'test'
 require File.join(File.dirname(__FILE__), '..', './app/server.rb')
 require './data_mapper_setup'
 
+require 'database_cleaner'
 require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
@@ -54,6 +55,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin
@@ -102,4 +104,21 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+end
+
+RSpec.configure do |config|
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
 end
