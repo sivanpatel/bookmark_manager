@@ -55,14 +55,9 @@ class Bookmark_Manager < Sinatra::Base
     end
   end
 
-  get 'sessions/new' do
+  get '/sessions/new' do
     erb :'sessions/new'
   end
-
-  # get '/sessions/new' do
-  #   "Hello World"
-  #   erb :'sessions/new'
-  # end
 
   post '/sessions' do
   user = User.authenticate(params[:email], params[:password])
