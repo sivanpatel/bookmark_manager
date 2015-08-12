@@ -6,6 +6,8 @@ DataMapper.setup(:default, ENV["DATABASE_URL"] || "postgres://localhost/bookmark
 
 require './app/models/link'
 require './app/models/tag'
+require './app/models/user'
+
 
 
 DataMapper.finalize
