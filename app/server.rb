@@ -6,7 +6,7 @@ require './data_mapper_setup'
 
 class Bookmark_Manager < Sinatra::Base
 
-  set :views, proc { File.join(root,'..','views') }
+  set :views, proc { File.join(root,'..','app','views') }
   enable :sessions
   register Sinatra::Flash
   set :session_secret, 'super secret'
@@ -43,15 +43,35 @@ class Bookmark_Manager < Sinatra::Base
   end
 
   post '/users' do
-    @user = User.create(email: params[:email],
+    @user = User.new(email: params[:email],
               password: params[:password],
               password_confirmation: params[:password_confirmation])
     if @user.save
       session[:user_id] = @user.id
       redirect to('/links')
     else
-      flash.now[:notice] = "Password and confirmation password do not match"
+      flash.now[:errors] = @user.errors.full_messages
       erb :'users/new'
+    end
+  end
+
+  get 'sessions/new' do
+    erb :'sessions/new'
+  end
+
+  # get '/sessions/new' do
+  #   "Hello World"
+  #   erb :'sessions/new'
+  # end
+
+  post '/sessions' do
+  user = User.authenticate(params[:email], params[:password])
+    if user
+      session[:user_id] = user.id
+      redirect to('/links')
+    else
+      flash.now[:errors] = ['The email or password is incorrect']
+      erb :'sessions/new'
     end
   end
 
